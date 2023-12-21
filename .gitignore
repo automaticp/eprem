@@ -63,3 +63,8 @@ stamp-h1
 # Generated Makefile (meta build system like autotools can automatically
 # generate from config.status script, which ./configure calls).
 Makefile
+
+build/
+.cache/
+.local/
+CMakeUserPresets.json
