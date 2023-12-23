@@ -3,12 +3,9 @@ add_executable(eprem ${local_sources})
 target_include_directories(eprem PRIVATE ./)
 target_compile_features(eprem PRIVATE c_std_99)
 
-find_package(MPI REQUIRED)
-find_package(HDF5 REQUIRED)
+find_package(MPI    REQUIRED)
+find_package(HDF5   REQUIRED)
+find_package(Config REQUIRED)
+find_package(NetCDF REQUIRED)
 
-# No Find/Config file for these, but they spit their headers into system include dir
-# find_package(libnetcdf REQUIRED)
-# find_package(libconfig REQUIRED)
-
-target_link_libraries(eprem PRIVATE MPI::MPI_C HDF5::HDF5)
-target_link_libraries(eprem PRIVATE "netcdf" "config")
+target_link_libraries(eprem PRIVATE MPI::MPI_C HDF5::HDF5 Config::Config NetCDF::NetCDF)
