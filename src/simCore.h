@@ -22,6 +22,8 @@
 #ifndef SIMCORE_H
 #define SIMCORE_H
 
+#include "baseTypes.h"
+
 // flags used throughout the simulation
 extern Index_t weInitializedEPs;
 extern Index_t mhdGridStatus;
