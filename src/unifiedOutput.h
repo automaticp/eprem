@@ -24,6 +24,8 @@
 #ifndef UNIFIEDOUTPUT_H
 #define UNIFIEDOUTPUT_H
 
+#include "baseTypes.h"
+
 extern Index_t observerTimeSlice;
 extern Index_t pointObserverTimeSlice;
 extern Index_t domainTimeSlice;

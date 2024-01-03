@@ -22,7 +22,7 @@
 #ifndef GEOMETRY_H
 #define GEOMETRY_H
 
-#include "cubeShellStruct.h"
+#include "baseTypes.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,7 +33,7 @@ extern "C" {
 /*-----------------------------------------------------------------------*/
 /*--*/      SphVec_t                                                    /*---*/
 /*--*/    cartToSphPos(Vec_t vec)   ;
-/*--* uses x,y,z to find other r, theta, phi components              *---*/ 
+/*--* uses x,y,z to find other r, theta, phi components              *---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 
@@ -41,7 +41,7 @@ extern "C" {
 /*-----------------------------------------------------------------------*/
 /*--*/    SphVec_t                                                   /*--*/
 /*--*/    cartToSphPosAu(Vec_t position);                            /*--*/
-/*--*/                                                               /*--*/ 
+/*--*/                                                               /*--*/
 /*--*/                                                               /*--*/
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
@@ -50,21 +50,21 @@ extern "C" {
 /*-----------------------------------------------------------------------*/
 /*--*/      Vec_t                                                  /*---*/
 /*--*/    sphToCartPos(SphVec_t vec)   ;
-/*--* uses r, theta,phi to find other x, y, z components              *---*/ 
+/*--* uses r, theta,phi to find other x, y, z components              *---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
 /*--*/      SphVec_t                                                /*---*/
-/*--*/    cartToSphVector(Vec_t vec, Vec_t pos) ;   
-/*--* input x,y,z vector, outputs corresponding spherical vector     *---*/ 
+/*--*/    cartToSphVector(Vec_t vec, Vec_t pos) ;
+/*--* input x,y,z vector, outputs corresponding spherical vector     *---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
 /*--*/      Vec_t                                                   /*---*/
-/*--*/    sphToCartVector(SphVec_t vec, Vec_t pos) ;  
-/*--* input r,theta,phi vector, outputs corresponding Cartesian vector.*---*/ 
+/*--*/    sphToCartVector(SphVec_t vec, Vec_t pos) ;
+/*--* input r,theta,phi vector, outputs corresponding Cartesian vector.*---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 
@@ -101,19 +101,19 @@ extern "C" {
 /*-----------------------------------------------------------------------*/
 /*--*/      Scalar_t
 /*--*/    dotProduct(Vec_t v1, Vec_t v2)   ;
-/*--* gotta love dot                                                 *---*/ 
+/*--* gotta love dot                                                 *---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
 /*--*/      Scalar_t
-/*--*/    vectorMag(Vec_t v1)  ; 
-/*--* returns the magnitude of a vector                              *---*/ 
+/*--*/    vectorMag(Vec_t v1)  ;
+/*--* returns the magnitude of a vector                              *---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
-  
+
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
 /*--*/      Vec_t                                              /*---*/
@@ -126,7 +126,7 @@ extern "C" {
 /*-----------------------------------------------------------------------*/
 /*--*/      Vec_t                                              /*---*/
 /*--*/    rotZ(Vec_t vec, Scalar_t angle)   ;
-/*--* representation of vecotr in rotated frame: rot by angle abut z *---*/ 
+/*--* representation of vecotr in rotated frame: rot by angle abut z *---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 
@@ -134,7 +134,7 @@ extern "C" {
 /*-----------------------------------------------------------------------*/
 /*--*/      Vec_t                                              /*---*/
 /*--*/    rotY(Vec_t vec, Scalar_t angle)   ;
-/*--* representation of vecotr in rotated frame: rot by angle abut Y *---*/ 
+/*--* representation of vecotr in rotated frame: rot by angle abut Y *---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 
@@ -142,7 +142,7 @@ extern "C" {
 /*-----------------------------------------------------------------------*/
 /*--*/      Vec_t                                              /*---*/
 /*--*/    rotX(Vec_t vec, Scalar_t angle)   ;
-/*--* representation of vecotr in rotated frame: rot by angle abut X *---*/ 
+/*--* representation of vecotr in rotated frame: rot by angle abut X *---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 
@@ -155,8 +155,8 @@ extern "C" {
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
-  
-  
+
+
 #ifdef __cplusplus
 }
 #endif

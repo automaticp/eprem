@@ -26,6 +26,8 @@
 #ifndef ENERGETICPARTICLESTYPES_H
 #define ENERGETICPARTICLESTYPES_H
 
+#include "baseTypes.h"
+
 /*-- Per grid-node energetic particle data. (See cubeShellStruct.h)   --*/
 /*-- Data type for per-shell-node energetic particle information:     --*/
 /*-- Holds all the particle information for a single grid/shell node. --*/

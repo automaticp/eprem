@@ -22,9 +22,7 @@
 #ifndef SEARCHTYPES_H
 #define SEARCHTYPES_H
 
-#include "global.h"
-#include "configuration.h"
-#include "cubeShellStruct.h"
+#include "baseTypes.h"
 
 /*-- Exported Vars. -------------------------*/
 
@@ -34,8 +32,8 @@
 /*----------------------------------------------------------*/
 
 Scalar_t                                                          /*--*/
-findIntersection( Vec_t x0,    
-		  Vec_t x1,    
+findIntersection( Vec_t x0,
+		  Vec_t x1,
 		  Scalar_t r);
 
 /*------------------------------------------------------------------*/

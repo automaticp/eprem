@@ -22,21 +22,20 @@
 /* license online at http://www.gnu.org/copyleft/gpl.html. */
 
 #include <math.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <float.h>
 
 #include "baseTypes.h"
 #include "global.h"
 #include "configuration.h"
+#include "mpiInit.h"
 #include "energeticParticles.h"
+#include "energeticParticlesTypes.h"
 #include "energeticParticlesBoundary.h"
 #include "unifiedOutput.h"
 #include "simCore.h"
 #include "geometry.h"
 #include "error.h"
-#include "flow.h"
-#include "observerOutput.h"
 #include "timers.h"
 
 Scalar_t *deltaShell;
@@ -218,9 +217,9 @@ Scalar_t leaving_rightGlobal = 0;
           timer_tmp = MPI_Wtime();
 
           AdiabaticChange(face, row, col, shell, dt);
-          
+
           timer_adiabaticchange = timer_adiabaticchange + (MPI_Wtime() - timer_tmp);
-          
+
         } // adiabaticChange
 
       } // Stream index
@@ -2597,7 +2596,7 @@ Scalar_t leaving_rightGlobal = 0;
   workIndex = mpi_rank + N_PROCS * iterIndex;
 
   dshmin = config.dsh_min;
-  
+
   // check if this process received work
   if (workIndex < NUM_STREAMS)
   {

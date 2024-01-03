@@ -24,19 +24,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <time.h>
 #include <float.h>
 #include <string.h>
 
 #include "global.h"
 #include "cubeShellInit.h"
 #include "cubeShellStruct.h"
-#include "readMHD.h"
+#include "mpiInit.h"
 #include "mhdInterp.h"
-#include "observerOutput.h"
-#include "searchTypes.h"
 #include "configuration.h"
-#include "energeticParticlesBoundary.h"
 #include "geometry.h"
 #include "error.h"
 

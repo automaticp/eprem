@@ -24,9 +24,9 @@
 #include "global.h"
 #include "configuration.h"
 #include "flow.h"
+#include "mpiInit.h"
 #include "simCore.h"
 #include "geometry.h"
-#include "readMHD.h"
 #include "mhdInterp.h"
 
 

@@ -10,19 +10,15 @@
 /* Temple Place, Suite 330, Boston MA 02111-1307 USA or by viewing the */
 /* license online at http://www.gnu.org/copyleft/gpl.html. */
 
-#include <stdio.h>
 #include <math.h>
 #include <float.h>
 
 #include "global.h"
 #include "configuration.h"
-#include "energeticParticles.h"
+#include "mpiInit.h"
+#include "energeticParticlesTypes.h"
 #include "energeticParticlesBoundary.h"
 #include "cubeShellStruct.h"
-#include "simCore.h"
-#include "flow.h"
-#include "error.h"
-
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/

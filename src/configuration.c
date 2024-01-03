@@ -14,11 +14,11 @@
 /* Temple Place, Suite 330, Boston MA 02111-1307 USA or by viewing the */
 /* license online at http://www.gnu.org/copyleft/gpl.html. */
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <math.h>
 #include <libconfig.h>
+
 #include "global.h"
 #include "configuration.h"
 #include "mpiInit.h"
@@ -331,7 +331,7 @@ setRuntimeConstants( void )
   config.simStartTimeDay = config.simStartTime / DAY;
   config.simStopTimeDay  = config.simStopTime / DAY;
   config.tDel            /= DAY;
-  
+
   config.mhdUs           = ( config.flowMag / C );
   config.mhdNsAu         = ( config.mhdDensityAu / MHD_DENSITY_NORM );
   config.mhdBsAu         = ( config.mhdBAu / MHD_B_NORM );

@@ -68,15 +68,14 @@
 /* license online at http://www.gnu.org/copyleft/gpl.html. */
 
 #include <time.h>
-#include <math.h>
 #include "global.h"
 #include "configuration.h"
 #include "energeticParticlesInit.h"
 #include "energeticParticles.h"
 #include "cubeShellInit.h"
+#include "mpiInit.h"
 #include "readMHD.h"
 #include "mhdInterp.h"
-#include "searchTypes.h"
 #include "unifiedOutput.h"
 #include "observerOutput.h"
 #include "flow.h"

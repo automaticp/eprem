@@ -19,7 +19,7 @@
 #include <mfhdf.h>
 #endif
 
-#include "cubeShellStruct.h"
+#include "baseTypes.h"
 
 extern Scalar_t *mhdTime;
 

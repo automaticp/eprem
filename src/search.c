@@ -66,15 +66,13 @@
 /* Temple Place, Suite 330, Boston MA 02111-1307 USA or by viewing the */
 /* license online at http://www.gnu.org/copyleft/gpl.html. */
 
-#include <stdlib.h>
 #include <math.h>
+
 #include "global.h"
 #include "configuration.h"
+#include "mpiInit.h"
 #include "searchTypes.h"
-#include "simCore.h"
 #include "geometry.h"
-#include "observerOutput.h"
-#include "error.h"
 #include "timers.h"
 
 /*------------------------------------------------------------------*/

@@ -10,26 +10,19 @@
 /* Temple Place, Suite 330, Boston MA 02111-1307 USA or by viewing the */
 /* license online at http://www.gnu.org/copyleft/gpl.html. */
 
-#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include <hdf5.h>
 #include <hdf5_hl.h>
+#include <unistd.h>
 
 #ifdef HAVE_HDF4
 #include <mfhdf.h>
 #endif
 
-#include <unistd.h>
 #include "readMHD.h"
-#include "mpiInit.h"
-#include "global.h"
 #include "configuration.h"
-#include "error.h"
 #include "simCore.h"
-#include "flow.h"
-#include "observerOutput.h"
-#include "timers.h"
 
 #ifndef HAVE_HDF4
 #define H4_MAX_VAR_DIMS 32

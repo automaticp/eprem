@@ -28,7 +28,6 @@
 #include "energeticParticlesInit.h"
 #include "energeticParticlesTypes.h"
 #include "energeticParticlesBoundary.h"
-#include "error.h"
 
 /*------------------------------------------------------------------*/
 /*------------------------------------------------------------------*/

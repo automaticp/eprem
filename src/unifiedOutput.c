@@ -27,18 +27,18 @@
 #include <math.h>
 #include <string.h>
 
+#include "safeNetcdf.h"
 #include "global.h"
 #include "configuration.h"
+#include "energeticParticlesTypes.h"
 #include "unifiedOutput.h"
 #include "geometry.h"
 #include "mhdInterp.h"
-#include "safeNetcdf.h"
+#include "mpiInit.h"
 #include "cubeShellStruct.h"
 #include "searchTypes.h"
 #include "simCore.h"
-#include "error.h"
 #include "timers.h"
-#include "flow.h"
 
 Index_t** computeLines;
 

@@ -23,7 +23,6 @@
 /* license online at http://www.gnu.org/copyleft/gpl.html. */
 
 #include "global.h"
-#include "configuration.h"
 #include "cubeShellStruct.h"
 
 

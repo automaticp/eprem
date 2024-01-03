@@ -25,7 +25,6 @@
 
 #include <stdlib.h>
 #include "global.h"
-#include "configuration.h"
 #include "energeticParticlesTypes.h"
 
 Scalar_t lnpmin;

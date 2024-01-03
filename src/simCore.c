@@ -19,7 +19,6 @@
 /* Temple Place, Suite 330, Boston MA 02111-1307 USA or by viewing the */
 /* license online at http://www.gnu.org/copyleft/gpl.html. */
 
-#include <stdio.h>
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
@@ -27,16 +26,12 @@
 #include "global.h"
 #include "configuration.h"
 #include "simCore.h"
-#include "geometry.h"
-#include "energeticParticles.h"
 #include "flow.h"
 #include "mhdInterp.h"
+#include "mpiInit.h"
 #include "readMHD.h"
 #include "unifiedOutput.h"
-#include "searchTypes.h"
 #include "cubeShellStruct.h"
-#include "observerOutput.h"
-#include "error.h"
 #include "timers.h"
 
 Time_t        t_global;             /*-- Simulation current time.         --*/

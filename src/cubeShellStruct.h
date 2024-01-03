@@ -23,9 +23,7 @@
 #ifndef CUBESHELLSTRUCT_H
 #define CUBESHELLSTRUCT_H
 
-#include "mpiInit.h"
 #include "baseTypes.h"
-#include "energeticParticlesTypes.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,19 +35,19 @@ extern "C" {
     Index_t     row;
     Index_t     col;
     Index_t     shell;
-    MPI_Rank_t  rank;  
+    MPI_Rank_t  rank;
     Scalar_t    dl;    /*-- scale length to the neighbor --*/
     Scalar_t    dlPer; /*-- scale length perp to field   --*/
   }
   /*.....................END..*/ Neighbor_t;
-  
+
   /*-- MPI data type info (see cubeShellStruct.h): --*/
   /*-- Number of fields in Neighbor_t.             --*/
 #define NUM_NGBR_FLDS 7
-  
+
   /*.............................Node_t...*/
   typedef struct {
-    
+
     /*--- shell associated data ---*/
     Vec_t     r;      /*-- 3-d space position of this node.     --*/
     Vec_t     rOld;   /*-- previous spatial position.           --*/
@@ -80,7 +78,7 @@ extern "C" {
     Scalar_t  mhdDlnN  ;  /*-- ln(n[dt])/ln(n[0])               --*/
     Scalar_t  mhdDuPar ;  /*-- eb dot (Del U)                   --*/
     SphVec_t  curlBoverB2; /*-- del x B/B2 used for drift vel.  --*/
-    
+
     /*--- Neighbors of this node (cube associated data) ---*/
     Neighbor_t n;
     Neighbor_t e;
@@ -88,18 +86,18 @@ extern "C" {
     Neighbor_t s;
     Neighbor_t streamIn;     /*-- streamline neighbor toward origin.*/
     Neighbor_t streamOut;    /*-- streamline neighbor away from origin.*/
-    
+
   }
   /*.....................END..*/ Node_t;
-  
+
   /*-- MPI data type info (see cubeShellStruct.h): --*/
   /*-- Number of data fields in Node_t.            --*/
 #define NUM_DATA_FLDS 29
   /*-- Number of neighbor link fields in  Node_t.  --*/
 #define NUM_LINK_FLDS 6
-  
+
   typedef Node_t *  NodePTR_t;
-  
+
   /*-- Neighbor direction indicators. --*/
 #define NORTH 0
 #define EAST  1
@@ -107,8 +105,8 @@ extern "C" {
 #define SOUTH 3
 #define NUM_DIRS 4
 #define NUM_FACES 6
-  
-  
+
+
 /*-- Some conventions for naming in the grid.                          --*/
 /*-- Cube faces: think of yourself standing at the origin in 3-space,  --*/
 /*-- looking in the +x direction with your feet at -z and your head    --*/
@@ -119,7 +117,7 @@ extern "C" {
 /*-- orientation, there are four face directions that the grid links   --*/
 /*-- define: NORTH, EAST, WEST, and SOUTH.                             --*/
 /*-- Shells: count from the inner-most outward.                        --*/
-  
+
 #define TOP_FACE    0
 #define BOTTOM_FACE 1
 #define FRONT_FACE 	2
@@ -129,11 +127,11 @@ extern "C" {
 #define REAL_FACES  6
 #define OBS_FACE_A  6
 #define OBS_FACE_Z  ( NUM_FACES-1 )
-  
+
 #define INNER_SHELL	0
 #define INNER_ACTIVE_SHELL 1
 
-  
+
   /*---------------------------------
    -- a node reference looks something like this: --
    --
@@ -143,8 +141,8 @@ extern "C" {
    --
    --      stream = grid[ cube_face ][ face_row ][ face_col ];
    ---------------------------------------------------*/
-  
-  
+
+
   /*-- MPI equivalent types --*/
   extern MPI_Datatype Neighbor_T;
   extern MPI_Datatype NodeLinks_T;
@@ -153,11 +151,11 @@ extern "C" {
   extern MPI_Datatype ShellData_T;
   extern MPI_Datatype ShellLinks_T;
   extern MPI_Datatype Node_T;
-  
-  
+
+
   /*---*/         void                                              /*---*/
   /*---*/   initMPI_cubeShellStruct(void )                          /*---*/;
-  
+
 #ifdef __cplusplus
 }
 #endif

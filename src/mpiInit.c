@@ -27,14 +27,12 @@
 /* Temple Place, Suite 330, Boston MA 02111-1307 USA or by viewing the */
 /* license online at http://www.gnu.org/copyleft/gpl.html. */
 
-#include <stdio.h>
 #include <stdlib.h>
 
 #include "global.h"
 #include "configuration.h"
 #include "mpiInit.h"
-#include "searchTypes.h"
-#include "error.h"
+#include "energeticParticlesTypes.h"
 
 MPI_Comm comm_shared;       /*-- shared communicator for local node. --*/
 MPI_Rank_t mpi_rank;        /*-- rank of processor.                  --*/

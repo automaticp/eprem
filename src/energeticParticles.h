@@ -23,6 +23,8 @@
 #ifndef ENERGETICPARTICLES_H
 #define ENERGETICPARTICLES_H
 
+#include "baseTypes.h"
+#include "cubeShellStruct.h"
 
 #ifdef __cplusplus
 extern "C" {

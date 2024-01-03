@@ -20,7 +20,6 @@
 #endif
 
 #include <unistd.h>
-#include "cubeShellStruct.h"
 
 
 void mhdReadMeshDimensions( char *fname , char *dsetname, int dsetnumber, int32_t *DimMax );

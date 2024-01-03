@@ -18,7 +18,6 @@
 #include "geometry.h"
 #include "readMHD.h"
 #include "mpiInit.h"
-#include "error.h"
 #include "simCore.h"
 #include "flow.h"
 

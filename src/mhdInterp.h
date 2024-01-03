@@ -13,6 +13,9 @@
 #ifndef MHDINTERP_H
 #define MHDINTERP_H
 
+#include "baseTypes.h"
+#include "cubeShellStruct.h"
+
 #define Bpindex(r,t,p) ((r) + mhdBprDimMax[0] * (t) + mhdBprDimMax[0] * mhdBptDimMax[0] * (p))
 #define Btindex(r,t,p) ((r) + mhdBtrDimMax[0] * (t) + mhdBtrDimMax[0] * mhdBttDimMax[0] * (p))
 #define Brindex(r,t,p) ((r) + mhdBrrDimMax[0] * (t) + mhdBrrDimMax[0] * mhdBrtDimMax[0] * (p))

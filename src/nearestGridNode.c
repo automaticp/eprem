@@ -1,7 +1,7 @@
 /* EMMREM
- 
+
  Utilities for finding grid nodes nearest neighbors
- 
+
  */
 
 /* The Earth-Moon-Mars Radiation Environment Module (EMMREM) software is */
@@ -19,7 +19,6 @@
 #include <math.h>
 
 #include "global.h"
-#include "configuration.h"
 #include "nearestGridNode.h"
 #include "cubeShellStruct.h"
 #include "geometry.h"
@@ -46,14 +45,14 @@ getNearestGridNodesOnShell( Index_t shell,
   /*--    get nearest projection on the sphere in dir            --*/
   /*--    thetaDir = 1.0, phiDir = 1.0 places this in the +/+ quad --*/
   /*---------------------------------------------------------------*/
-  
+
   Index_t face, col, row;
   Vec_t dx;
   Scalar_t rmag, rper;
   Scalar_t minNorth, minEast, minWest, minSouth;
   Scalar_t dsNorth, dsEast, dsWest, dsSouth;
   Vec_t north, east, west, south;
-  
+
   /* establish directions */
   rmag = sqrt(r.x*r.x+r.y*r.y+r.z*r.z)+1.0e-10;
   rper = sqrt(r.x*r.x+r.y*r.y)+1.0e-10;
@@ -69,47 +68,47 @@ getNearestGridNodesOnShell( Index_t shell,
   west.x=-1.0*east.x;
   west.y=-1.0*east.y;
   west.z=-1.0*east.z;
-  
+
   /* initialize to a bad answer */
   *nface = REAL_FACES;
   *eface = REAL_FACES;
   *wface = REAL_FACES;
   *sface = REAL_FACES;
-  
+
   *nrow = FACE_ROWS;
   *erow = FACE_ROWS;
   *wrow = FACE_ROWS;
   *srow = FACE_ROWS;
-  
+
   *ncol = FACE_COLS;
   *ecol = FACE_COLS;
   *wcol = FACE_COLS;
   *scol = FACE_COLS;
-  
+
   /* init large mins */
   minNorth = 1000.0;
   minEast  = 1000.0;
   minWest  = 1000.0;
   minSouth = 1000.0;
-  
+
   for (face = 0; face < REAL_FACES; face++){
     for (row = 0; row < FACE_ROWS; row++){
       for (col = 0; col < FACE_COLS; col++){
-        
+
         dx.x =
         grid[idx_frcs(face,row,col,shell)].r.x -
         r.x ;
-        
+
         dx.y =
         grid[idx_frcs(face,row,col,shell)].r.y -
         r.y ;
-        
+
         dx.z =
         grid[idx_frcs(face,row,col,shell)].r.z -
         r.z ;
-        
+
         dsNorth = dotProduct(dx,north);
-        
+
         if ( (dsNorth > 0.0) &&
             (dsNorth < minNorth) ) {
           minNorth = dsNorth;
@@ -117,32 +116,32 @@ getNearestGridNodesOnShell( Index_t shell,
           *nrow = row;
           *ncol = col;
         }
-        
+
       }}} /* face, row col loop */
-  
-  
+
+
   for (face = 0; face < REAL_FACES; face++){
     for (row = 0; row < FACE_ROWS; row++){
       for (col = 0; col < FACE_COLS; col++){
-        
+
         if ( (face != *nface) ||
             (row  != *nrow)  ||
             (col  != *ncol)  ) {
-          
+
           dx.x =
           grid[idx_frcs(face,row,col,shell)].r.x -
           r.x ;
-          
+
           dx.y =
           grid[idx_frcs(face,row,col,shell)].r.y -
           r.y ;
-          
+
           dx.z =
           grid[idx_frcs(face,row,col,shell)].r.z -
           r.z ;
-          
+
           dsEast = dotProduct(dx,east);
-          
+
           if ( (dsEast > 0.0) &&
               (dsEast < minEast) ) {
             minEast = dsEast;
@@ -150,36 +149,36 @@ getNearestGridNodesOnShell( Index_t shell,
             *erow = row;
             *ecol = col;
           }
-          
+
         } /* the not North if */
-        
-        
+
+
       }}} /* face, row col loop */
-  
-  
-  
+
+
+
   for (face = 0; face < REAL_FACES; face++){
     for (row = 0; row < FACE_ROWS; row++){
       for (col = 0; col < FACE_COLS; col++){
-        
+
         if ( (face != *nface) ||
             (row  != *nrow)  ||
             (col  != *ncol)  ) {
-          
+
           dx.x =
           grid[idx_frcs(face,row,col,shell)].r.x -
           r.x ;
-          
+
           dx.y =
           grid[idx_frcs(face,row,col,shell)].r.y -
           r.y ;
-          
+
           dx.z =
           grid[idx_frcs(face,row,col,shell)].r.z -
           r.z ;
-          
+
           dsWest = dotProduct(dx,west);
-          
+
           if ( (dsWest > 0.0) &&
               (dsWest < minWest) ) {
             minWest = dsWest;
@@ -187,17 +186,17 @@ getNearestGridNodesOnShell( Index_t shell,
             *wrow = row;
             *wcol = col;
           }
-          
+
         } /* the not North if */
-        
-        
+
+
       }}} /* face, row col loop */
-  
-  
+
+
   for (face = 0; face < REAL_FACES; face++){
     for (row = 0; row < FACE_ROWS; row++){
       for (col = 0; col < FACE_COLS; col++){
-        
+
         if (
             ( (face != *eface) ||
              (row  != *erow)  ||
@@ -206,21 +205,21 @@ getNearestGridNodesOnShell( Index_t shell,
              (row  != *wrow)  ||
              (col  != *wcol)  ) )
         {
-          
+
           dx.x =
           grid[idx_frcs(face,row,col,shell)].r.x -
           r.x ;
-          
+
           dx.y =
           grid[idx_frcs(face,row,col,shell)].r.y -
           r.y ;
-          
+
           dx.z =
           grid[idx_frcs(face,row,col,shell)].r.z -
           r.z ;
-          
+
           dsSouth = dotProduct(dx,south);
-          
+
           if ( (dsSouth > 0.0) &&
               (dsSouth < minSouth) ) {
             minSouth = dsSouth;
@@ -228,14 +227,14 @@ getNearestGridNodesOnShell( Index_t shell,
             *srow = row;
             *scol = col;
           }
-          
+
         } /* the not East or West if */
-        
-        
+
+
       }}} /* face, row col loop */
-  
+
   return 0;
-  
+
 }  /* end function find nearest projection */
 /*------------------------------------------------------------------*/
 /*------------------------------------------------------------------*/
@@ -262,15 +261,15 @@ getNearestExclGridNodesOnShell( Index_t shell,
   /*--    get nearest projections on the sphere                  --*/
   /*--    exclude f,r,c                                          --*/
   /*---------------------------------------------------------------*/
-  
+
   Index_t face, col, row;
   Vec_t dx;
   Scalar_t rmag, rper;
   Scalar_t minNorth, minEast, minWest, minSouth;
   Scalar_t dsNorth, dsEast, dsWest, dsSouth;
   Vec_t north, east, west, south;
-  
-  
+
+
   /* establish directions */
   rmag = sqrt(r.x*r.x+r.y*r.y+r.z*r.z)+1.0e-10;
   rper = sqrt(r.x*r.x+r.y*r.y)+1.0e-10;
@@ -286,53 +285,53 @@ getNearestExclGridNodesOnShell( Index_t shell,
   west.x=-1.0*east.x;
   west.y=-1.0*east.y;
   west.z=-1.0*east.z;
-  
-  
+
+
   /* initialize to a bad answer */
   *nface = REAL_FACES;
   *eface = REAL_FACES;
   *wface = REAL_FACES;
   *sface = REAL_FACES;
-  
+
   *nrow = FACE_ROWS;
   *erow = FACE_ROWS;
   *wrow = FACE_ROWS;
   *srow = FACE_ROWS;
-  
+
   *ncol = FACE_COLS;
   *ecol = FACE_COLS;
   *wcol = FACE_COLS;
   *scol = FACE_COLS;
-  
+
   /* init large mins */
   minNorth = 1000.0;
   minEast  = 1000.0;
   minWest  = 1000.0;
   minSouth = 1000.0;
-  
+
   for (face = 0; face < REAL_FACES; face++){
     for (row = 0; row < FACE_ROWS; row++){
       for (col = 0; col < FACE_COLS; col++){
-        
+
         if ( (face != fa) ||
             (row  != ro) ||
             (col  != co) ) {
-          
-          
+
+
           dx.x =
           grid[idx_frcs(face,row,col,shell)].r.x -
           r.x ;
-          
+
           dx.y =
           grid[idx_frcs(face,row,col,shell)].r.y -
           r.y ;
-          
+
           dx.z =
           grid[idx_frcs(face,row,col,shell)].r.z -
           r.z ;
-          
+
           dsNorth = dotProduct(dx,north);
-          
+
           if ( (dsNorth > 0.0) &&
               (dsNorth < minNorth) ) {
             minNorth = dsNorth;
@@ -340,39 +339,39 @@ getNearestExclGridNodesOnShell( Index_t shell,
             *nrow = row;
             *ncol = col;
           }
-          
+
         } /* not {f,r,c} if */
-        
+
       }}} /* face, row col loop */
-  
-  
+
+
   for (face = 0; face < REAL_FACES; face++){
     for (row = 0; row < FACE_ROWS; row++){
       for (col = 0; col < FACE_COLS; col++){
-        
+
         if ( (face != fa) ||
             (row  != ro) ||
             (col  != co) ) {
-          
-          
+
+
           if ( (face != *nface) ||
               (row  != *nrow)  ||
               (col  != *ncol)  ) {
-            
+
             dx.x =
             grid[idx_frcs(face,row,col,shell)].r.x -
             r.x ;
-            
+
             dx.y =
             grid[idx_frcs(face,row,col,shell)].r.y -
             r.y ;
-            
+
             dx.z =
             grid[idx_frcs(face,row,col,shell)].r.z -
             r.z ;
-            
+
             dsEast = dotProduct(dx,east);
-            
+
             if ( (dsEast > 0.0) &&
                 (dsEast < minEast) ) {
               minEast = dsEast;
@@ -380,43 +379,43 @@ getNearestExclGridNodesOnShell( Index_t shell,
               *erow = row;
               *ecol = col;
             }
-            
+
           } /* the not North if */
-          
+
         } /* not {f,r,c} if */
-        
-        
+
+
       }}} /* face, row col loop */
-  
-  
-  
+
+
+
   for (face = 0; face < REAL_FACES; face++){
     for (row = 0; row < FACE_ROWS; row++){
       for (col = 0; col < FACE_COLS; col++){
-        
+
         if ( (face != fa) ||
-            (row  != ro) || 
+            (row  != ro) ||
             (col  != co) ) {
-          
-          
+
+
           if ( (face != *nface) ||
               (row  != *nrow)  ||
               (col  != *ncol)  ) {
-            
-            dx.x = 
-            grid[idx_frcs(face,row,col,shell)].r.x - 
+
+            dx.x =
+            grid[idx_frcs(face,row,col,shell)].r.x -
             r.x ;
-            
-            dx.y = 
-            grid[idx_frcs(face,row,col,shell)].r.y - 
+
+            dx.y =
+            grid[idx_frcs(face,row,col,shell)].r.y -
             r.y ;
-            
-            dx.z = 
-            grid[idx_frcs(face,row,col,shell)].r.z - 
+
+            dx.z =
+            grid[idx_frcs(face,row,col,shell)].r.z -
             r.z ;
-            
+
             dsWest = dotProduct(dx,west);
-            
+
             if ( (dsWest > 0.0) &&
                 (dsWest < minWest) ) {
               minWest = dsWest;
@@ -424,23 +423,23 @@ getNearestExclGridNodesOnShell( Index_t shell,
               *wrow = row;
               *wcol = col;
             }
-            
+
           } /* the not North if */
-          
+
         } /* not {f,r,c} if */
-        
+
       }}} /* face, row col loop */
-  
-  
+
+
   for (face = 0; face < REAL_FACES; face++){
     for (row = 0; row < FACE_ROWS; row++){
       for (col = 0; col < FACE_COLS; col++){
-        
+
         if ( (face != fa) ||
-            (row  != ro) || 
+            (row  != ro) ||
             (col  != co) ) {
-          
-          if ( 
+
+          if (
               ( (face != *eface) ||
                (row  != *erow)  ||
                (col  != *ecol)  ) &&
@@ -448,21 +447,21 @@ getNearestExclGridNodesOnShell( Index_t shell,
                (row  != *wrow)  ||
                (col  != *wcol)  ) )
           {
-            
-            dx.x = 
-            grid[idx_frcs(face,row,col,shell)].r.x - 
+
+            dx.x =
+            grid[idx_frcs(face,row,col,shell)].r.x -
             r.x ;
-            
-            dx.y = 
-            grid[idx_frcs(face,row,col,shell)].r.y - 
+
+            dx.y =
+            grid[idx_frcs(face,row,col,shell)].r.y -
             r.y ;
-            
-            dx.z = 
-            grid[idx_frcs(face,row,col,shell)].r.z - 
+
+            dx.z =
+            grid[idx_frcs(face,row,col,shell)].r.z -
             r.z ;
-            
+
             dsSouth = dotProduct(dx,south);
-            
+
             if ( (dsSouth > 0.0) &&
                 (dsSouth < minSouth) ) {
               minSouth = dsSouth;
@@ -470,13 +469,13 @@ getNearestExclGridNodesOnShell( Index_t shell,
               *srow = row;
               *scol = col;
             }
-            
+
           } /* the not East or West if */
-          
+
         } /* not {f,r,c} if */
-        
+
       }}} /* face, row col loop */
-  
+
   return 0;
-  
+
 }  /* end function find excl nearest projection */

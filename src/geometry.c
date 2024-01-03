@@ -1,7 +1,7 @@
 /*-----------------------------------------------
 -- isoc/geometry: geometry.c
 --
--- Tools and routines related to geometry. 
+-- Tools and routines related to geometry.
 --
 -- ______________CHANGE HISTORY______________
 -- ___________________END CHANGE HISTORY_____________________
@@ -21,21 +21,20 @@
 
 #include <math.h>
 
-#include "global.h"
 #include "configuration.h"
 #include "geometry.h"
 
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
 /*--*/      SphVec_t                                                /*---*/
-/*--*/    cartToSphPos(Vec_t vec)   
-/*--* uses x,y,z to find other r, theta, phi components              *---*/ 
+/*--*/    cartToSphPos(Vec_t vec)
+/*--* uses x,y,z to find other r, theta, phi components              *---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
 {
   SphVec_t out;
-  out.r = sqrt( vec.x * vec.x 
+  out.r = sqrt( vec.x * vec.x
 		+ vec.y * vec.y
 		+ vec.z * vec.z);
   out.theta = acos( vec.z/ out.r);
@@ -47,8 +46,8 @@
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
 /*--*/      Vec_t                                                  /*---*/
-/*--*/    sphToCartPos(SphVec_t vec)   
-/*--* uses r, theta,phi to find other x, y, z components              *---*/ 
+/*--*/    sphToCartPos(SphVec_t vec)
+/*--* uses r, theta,phi to find other x, y, z components              *---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
@@ -62,15 +61,15 @@
 
 /*-----------------------------------------------------------------------*/
 /*--*/      SphVec_t                                                /*---*/
-/*--*/    cartToSphVector(Vec_t vec, Vec_t pos)   
-/*--* input x,y,z vector, outputs corresponding spherical vector     *---*/ 
+/*--*/    cartToSphVector(Vec_t vec, Vec_t pos)
+/*--* input x,y,z vector, outputs corresponding spherical vector     *---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
 {
   SphVec_t out;
   Scalar_t rmag;
-  
+
   rmag = sqrt(pos.x*pos.x + pos.y*pos.y + pos.z*pos.z);
 
   out.r = pos.x/rmag*vec.x + pos.y/rmag*vec.y+pos.z/rmag*vec.z;
@@ -79,15 +78,15 @@
     pos.y*pos.z/(rmag*sqrt(rmag*rmag-pos.z*pos.z))*vec.y -
     sqrt(rmag*rmag-pos.z*pos.z)/rmag*vec.z;
 
-  out.phi = -pos.y/sqrt(rmag*rmag-pos.z*pos.z)*vec.x + 
+  out.phi = -pos.y/sqrt(rmag*rmag-pos.z*pos.z)*vec.x +
     pos.x/sqrt(rmag*rmag-pos.z*pos.z)*vec.y;
   return out;
 }
 
 /*-----------------------------------------------------------------------*/
 /*--*/      Vec_t                                                   /*---*/
-/*--*/    sphToCartVector(SphVec_t vec, Vec_t pos)   
-/*--* input r,theta,phi vector, outputs corresponding Cartesian vector.*---*/ 
+/*--*/    sphToCartVector(SphVec_t vec, Vec_t pos)
+/*--* input r,theta,phi vector, outputs corresponding Cartesian vector.*---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
@@ -95,31 +94,31 @@
 
   Vec_t out;
   Scalar_t rmag;
-  
+
   rmag = sqrt(pos.x*pos.x + pos.y*pos.y + pos.z*pos.z);
 
 	if ( (rmag - fabs(pos.z)) < VERYSMALL )
 	{
-		
+
 		out.x = 0.0;
 		out.y = 0.0;
-	
+
 	}
 	else
 	{
-	
+
 		out.x = pos.x/rmag*vec.r +
 			pos.x*pos.z/(rmag*sqrt(rmag*rmag-pos.z*pos.z))*vec.theta -
 			pos.y/sqrt(rmag*rmag-pos.z*pos.z)*vec.phi;
-		
+
 		out.y = pos.y/rmag*vec.r +
-			pos.y*pos.z/(rmag*sqrt(rmag*rmag-pos.z*pos.z))*vec.theta + 
+			pos.y*pos.z/(rmag*sqrt(rmag*rmag-pos.z*pos.z))*vec.theta +
 			pos.x/sqrt(rmag*rmag-pos.z*pos.z)*vec.phi;
 
 	}
-	
+
   out.z = pos.z/rmag*vec.r - sqrt(rmag*rmag-pos.z*pos.z)/rmag*vec.theta;
-  
+
 	return out;
 
 }
@@ -129,27 +128,27 @@
 /*-----------------------------------------------------------------------*/
 /*--*/    SphVec_t                                                   /*--*/
 /*--*/    cartToSphPosAu(Vec_t position)                             /*--*/
-/*--*/                                                               /*--*/ 
+/*--*/                                                               /*--*/
 /*--*/                                                               /*--*/
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
 {
   Vec_t     positionAU;
-  SphVec_t  radpos;        
+  SphVec_t  radpos;
 
   positionAU.x = position.x * config.rScale;
   positionAU.y = position.y * config.rScale;
   positionAU.z = position.z * config.rScale;
-  
+
   radpos = cartToSphPos(positionAU);
-  
+
   if (radpos.phi < 0.0)
   {
     while (radpos.phi < 0.0) radpos.phi += 2*PI;
   }
-  
+
   if (radpos.phi > 2*PI)
-  { 
+  {
     while (radpos.phi > 2*PI) radpos.phi -= 2*PI;
   }
 
@@ -163,7 +162,7 @@
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
 /*--*/      Vec_t                                              /*---*/
-/*--*/    crossProduct(Vec_t v1, Vec_t v2)   
+/*--*/    crossProduct(Vec_t v1, Vec_t v2)
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
@@ -187,11 +186,11 @@
 /*-----------------------------------------------------------------------*/
 {
   Vec_t out;
-  
+
   out.x = (v1.x - v2.x);
   out.y = (v1.y - v2.y);
   out.z = (v1.z - v2.z);
-  
+
   return out;
 }
 
@@ -204,11 +203,11 @@
 /*-----------------------------------------------------------------------*/
 {
   Vec_t out;
-  
+
   out.x = (v1.x + v2.x);
   out.y = (v1.y + v2.y);
   out.z = (v1.z + v2.z);
-  
+
   return out;
 }
 
@@ -223,13 +222,13 @@
 {
   Vec_t out;
   Scalar_t mag;
-  
+
   mag = sqrt(v1.x*v1.x + v1.y*v1.y + v1.z*v1.z);
-  
+
   out.x = v1.x/mag;
   out.y = v1.y/mag;
   out.z = v1.z/mag;
-  
+
   return out;
 }
 
@@ -242,7 +241,7 @@
 /*-----------------------------------------------------------------------*/
 {
   Vec_t out;
-  
+
   out.x = v.x * s;
   out.y = v.y * s;
   out.z = v.z * s;
@@ -253,8 +252,8 @@
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
 /*--*/      Scalar_t
-/*--*/    dotProduct(Vec_t v1, Vec_t v2)   
-/*--* gotta love dot                                                 *---*/ 
+/*--*/    dotProduct(Vec_t v1, Vec_t v2)
+/*--* gotta love dot                                                 *---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
@@ -269,8 +268,8 @@
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
 /*--*/      Scalar_t
-/*--*/    vectorMag(Vec_t v1)   
-/*--* returns the magnitude of a vector                              *---*/ 
+/*--*/    vectorMag(Vec_t v1)
+/*--* returns the magnitude of a vector                              *---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
@@ -285,8 +284,8 @@
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
 /*--*/      Vec_t                                              /*---*/
-/*--*/    rotZ(Vec_t vec, Scalar_t angle)   
-/*--* representation of vecotr in rotated frame: rot by angle abut z *---*/ 
+/*--*/    rotZ(Vec_t vec, Scalar_t angle)
+/*--* representation of vecotr in rotated frame: rot by angle abut z *---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
@@ -305,8 +304,8 @@
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
 /*--*/      Vec_t                                              /*---*/
-/*--*/    rotY(Vec_t vec, Scalar_t angle)   
-/*--* representation of vecotr in rotated frame: rot by angle abut Y *---*/ 
+/*--*/    rotY(Vec_t vec, Scalar_t angle)
+/*--* representation of vecotr in rotated frame: rot by angle abut Y *---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
@@ -324,8 +323,8 @@
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
 /*--*/      Vec_t                                              /*---*/
-/*--*/    rotX(Vec_t vec, Scalar_t angle)   
-/*--* representation of vecotr in rotated frame: rot by angle abut X *---*/ 
+/*--*/    rotX(Vec_t vec, Scalar_t angle)
+/*--* representation of vecotr in rotated frame: rot by angle abut X *---*/
 /*--*                                                                *---*/
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
@@ -352,15 +351,15 @@
 /*-----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------*/
 {
-  
+
   Scalar_t s, out;
-  
+
   s = (x - x1) / (x2 - x1);
   out = f1 * (1.0 - s) + f2 * s;
-  
+
   return out;
-  
-  
+
+
 }
 
 

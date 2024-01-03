@@ -14,7 +14,8 @@
 /* license online at http://www.gnu.org/copyleft/gpl.html. */
 
 #include <libconfig.h>
-#include "cubeShellStruct.h"
+
+#include "baseTypes.h"
 
 typedef struct /* Config_t */ {
 

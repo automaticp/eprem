@@ -1,3 +1,6 @@
+#ifndef TIMERS_H
+#define TIMERS_H
+
 extern double timer_diffusestream;
 extern double timer_adiabaticfocus;
 extern double timer_adiabaticchange;
@@ -12,3 +15,5 @@ extern double timer_wall;
 extern double timer_start;
 extern double timer_MPIgatherscatter;
 extern double timer_MPIsendrecv;
+
+#endif

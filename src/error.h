@@ -22,8 +22,7 @@
 #ifndef ERROR_H
 #define ERROR_H
 
-#include "cubeShellStruct.h"
-
+#include "baseTypes.h"
 
 #ifdef __cplusplus
 extern "C" {

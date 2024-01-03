@@ -1,4 +1,4 @@
-/*---- EMMREMM 
+/*---- EMMREMM
   ----*/
 
 /* The Earth-Moon-Mars Radiation Environment Module (EMMREM) software is */
@@ -16,7 +16,9 @@
 #ifndef NEARGRIDNODE_H
 #define NEARGRIDNODE_H
 
-int                                       
+#include "baseTypes.h"
+
+int
 getNearestGridNodesOnShell( Index_t shell,
 			    Vec_t r,
 			    Index_t *nface,
@@ -30,10 +32,10 @@ getNearestGridNodesOnShell( Index_t shell,
 			    Index_t *wcol,
 			    Index_t *sface,
 			    Index_t *srow,
-			    Index_t *scol			    
+			    Index_t *scol
 			    );
 
-int                                                          
+int
 getNearestExclGridNodesOnShell( Index_t shell,
 				Vec_t r,
 				Index_t fa,
@@ -50,7 +52,7 @@ getNearestExclGridNodesOnShell( Index_t shell,
 				Index_t *wcol,
 				Index_t *sface,
 				Index_t *srow,
-				Index_t *scol			    
+				Index_t *scol
 				);
 
 
