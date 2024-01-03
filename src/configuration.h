@@ -31,6 +31,8 @@ typedef struct /* Config_t */ {
   // Disable line soft-wrapping if you don't want to go insane reading this.
 
 
+  // Grid Parameters:
+
   Index_t  numNodesPerStream;  // Number of nodes in the grid along each stream
   Index_t  numRowsPerFace;     // Number of rows of streams per face for 6 faces
   Index_t  numColumnsPerFace;  // Number of columns of streams per face for 6 faces
@@ -38,9 +40,7 @@ typedef struct /* Config_t */ {
   Index_t  numMuSteps;         // Number of pitch-angle steps. These are in cosine PA space and are spaced so that each step covers the same fraction of the unit sphere.
 
 
-  Index_t  adiabaticChangeAlg; // Select an algorithm for adiabatic change (from 1 to 3) (Used to init the global AdiabaticChangeAlg constant)
-  Index_t  adiabaticFocusAlg;  // Select an algorithm for adiabatic focusing (from 1 to 3) (Used to init the global AdiabaticFocusAlg constant)
-
+  // Core Simulation Parameters:
 
   Scalar_t  rScale;         // Location of the inner boundary (AU)
   Scalar_t  flowMag;        // Flow velocity of background constant solar wind (cm/s)
@@ -52,7 +52,7 @@ typedef struct /* Config_t */ {
   Index_t   numEpSteps;     // Number of ep-solver substeps, the number of times energetic particle distribution function is updated between updates to MHD/node flow. Affects numerical stability; 20 seems to be about right.
   Scalar_t  aziSunStart;    // Initial azimuth of the Sun's surface (radians)
   Scalar_t  omegaSun;       // Solar rotation rate (radians/AU/c)
-  Scalar_t  lamo;           // MFP (Mean Free Path) in AU at 1AU and 1GV. (TODO: Other distances/rigidities are scaled by ?)
+  Scalar_t  lamo;           // MFP (Mean Free Path) in AU at 1AU and 1GV.
   Scalar_t  dsh_min;        // Minimal distance (AU?) between shell nodes in parallel diffusion (depends on useParallelDiffusion). Nodes that are closer together than this value will be "deduplicated".
   Scalar_t  dsh_hel_min;    // (Unused)
   Scalar_t  mfpRadialPower;
@@ -62,49 +62,27 @@ typedef struct /* Config_t */ {
 
   Scalar_t  eMin;           // Minimum energy fully modeled in the code (MeV/nuc)
   Scalar_t  eMax;           // Maximum energy (MeV/nuc)
+  Scalar_t  gammaEhigh;     // (Unused) Negative slope of f at the upper energy boundary
+  Scalar_t  gammaElow;      // (Unused) Negative slope of f at the lower energy boundary. Because quantities in the energetic particle solver depend on derivatives of the distribution function, the slope at the smallest/largest energy bin (eMin/eMax) needs to be assumed
 
-
-  Index_t   useStochastic;  // (Unused)
-  Scalar_t  focusingLimit;  // (Unused)
-
-  Index_t   useEPBoundary;
   Index_t   checkSeedPopulation; // Floor/Reset distribution if it drops below background, (TODO: only on inner three nodes of each streamline?)
 
-  Scalar_t  gammaEhigh;     // Negative slope of f at the upper energy boundary
-  Scalar_t  gammaElow;      // Negative slope of f at the lower energy boundary. Because quantities in the energetic particle solver depend on derivatives of the distribution function, the slope at the smallest/largest energy bin (eMin/eMax) needs to be assumed
 
+  // Drift/Diffusion:
 
-  Index_t   FailModeDump;      // Dump out fail mode values
-
-  Index_t   seedFunctionTest;
-
-  Index_t   outputFloat;       // Output netcdf files in 32-bit precision (1) or 64-bit precision (0). Might be used to save disk space.
-
-  Index_t   unifiedOutput;     // Output all mhd and particle data for every node along streams. The name is historical; this is the main output that you almost always want.
-  Scalar_t  unifiedOutputTime;
-
-  Index_t   pointObserverOutput;     // (Unused)
-  Scalar_t  pointObserverOutputTime;
-
-  Index_t   streamFluxOutput;     // Output pre-computed flux instead of the particle distribution
-  Scalar_t  streamFluxOutputTime;
-
-  Index_t   subTimeCouple;  // (Unused) Couple to the MHD/plasma on the sub-timesteps
-
-  Index_t    epremDomain;   // Output position data for entire domain. Very often desirable, as this allows the node grid in inertial space.
-  Scalar_t   epremDomainOutputTime;
-
-  Index_t    unstructuredDomain;
-  Scalar_t   unstructuredDomainOutputTime; // (Unused)
-
-  Index_t    useAdiabaticChange;   // Use adiabatic change (TODO: presumably in energy, as expands?)
-  Index_t    useAdiabaticFocus;    // Use adiabatic focusing (change in PA as field decreases)
   Index_t    useShellDiffusion;    // Use perpendicular diffusion
   Index_t    useParallelDiffusion; // Use parallel diffusion. (TODO: Otherwise energetic particles will just flow into the domain with the plasma/never move node to node? Set mfp to 0?)
   Index_t    useDrift;             // Use particle drifts (TODO: Allow parallel diffusion?)
 
 
-  Index_t fluxLimiter; // (Unused)
+  // Adiabatic Change/Focusing:
+
+  Index_t    useAdiabaticChange; // Use adiabatic change (TODO: presumably in energy, as expands?)
+  Index_t    useAdiabaticFocus;  // Use adiabatic focusing (change in PA as field decreases)
+  Index_t    adiabaticChangeAlg; // Select an algorithm for adiabatic change (from 1 to 3) (Used to init the global AdiabaticChangeAlg constant)
+  Index_t    adiabaticFocusAlg;  // Select an algorithm for adiabatic focusing (from 1 to 3) (Used to init the global AdiabaticFocusAlg constant)
+  Index_t    useStochastic;      // (Unused)
+  Scalar_t   focusingLimit;      // (Unused)
 
 
   // Manual Stream Spawn:
@@ -165,6 +143,8 @@ typedef struct /* Config_t */ {
   Scalar_t mhdRhoConvert;
   Scalar_t mhdTimeConvert;
 
+  Index_t subTimeCouple;  // (Unused) Couple to the MHD/plasma on the sub-timesteps
+
 
   // Solar Energetic Particle Source Function Parameters:
   //
@@ -176,6 +156,7 @@ typedef struct /* Config_t */ {
   // Shell in that sense consists of multiple shells in the first sense).
   // The source is isotropic.
 
+  Index_t useEPBoundary;
   Index_t useBoundaryFunction;
   Index_t boundaryFunctionInitDomain; // Initialize particle source function over entire domain
 
@@ -199,7 +180,7 @@ typedef struct /* Config_t */ {
 
   // Ideal Cone CME:
   //
-  // This will launch a CME into the simulation. (TODO: Reference for what model?)
+  // This will launch a CME into the simulation.
 
   Index_t   idealShock;            // Flag for using the ideal shock solution
   Scalar_t  idealShockSharpness;   // Shock width (higher is sharper by idealShockScaleLength). Basically idealShockScaleLength is divided by this number to make it easier to tweak the shock parameters between runs.
@@ -213,12 +194,35 @@ typedef struct /* Config_t */ {
   Scalar_t  idealShockWidth;       // Width of cone CME (radian, entire domain (aka. isotropic) if 0.0)
 
 
-  int dumpFreq;        // Output cadence for all output and restart files (in number of steps)
-  int outputRestart;
-  int dumpOnAbort;
-  int saveRestartFile;
+  // Output Parameters:
 
-  char * warningsFile;
+  Index_t   unifiedOutput;       // Output all mhd and particle data for every node along streams. The name is historical; this is the main output that you almost always want.
+  Index_t   pointObserverOutput; // (Unused)
+  Index_t   streamFluxOutput;    // Output pre-computed flux instead of the particle distribution
+  Index_t   epremDomain;         // Output position data for entire domain. Very often desirable, as this allows the node grid in inertial space.
+  Index_t   unstructuredDomain;
+
+  Scalar_t  unifiedOutputTime;
+  Scalar_t  pointObserverOutputTime;
+  Scalar_t  streamFluxOutputTime;
+  Scalar_t  epremDomainOutputTime;
+  Scalar_t  unstructuredDomainOutputTime; // (Unused)
+
+  Index_t   FailModeDump; // (Unused) Dump out fail mode values
+  Index_t   outputFloat;  // Output netcdf files in 32-bit precision (1) or 64-bit precision (0). Might be used to save disk space.
+
+  int dumpFreq;        // Output cadence for all output and restart files (in number of steps)
+  int outputRestart;   // (Unused)
+  int dumpOnAbort;     // (Unused)
+  int saveRestartFile; // (Unused)
+
+  char * warningsFile; // File to dump warnings into
+
+
+  // Other Parameters:
+
+  Index_t   fluxLimiter;     // (Unused)
+  Index_t   seedFunctionTest;
 
 
   // These params are initialized from the above inputs:
