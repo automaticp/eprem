@@ -16,89 +16,121 @@
 #include <libconfig.h>
 #include "cubeShellStruct.h"
 
-typedef struct {
+typedef struct /* Config_t */ {
 
-  Index_t  numNodesPerStream;
-  Index_t  numRowsPerFace;
-  Index_t  numColumnsPerFace;
-  Index_t  numEnergySteps;
-  Index_t  numMuSteps;
-  Index_t  adiabaticChangeAlg;
-  Index_t  adiabaticFocusAlg;
+  // NOTE:
+  // The config parameter descriptions found here are taken from
+  // the EPREM Manual from Jan 2, 2018 and from the example template file with minor changes.
+  //
+  // These descriptions should apply to the parameters as they appear IN CODE,
+  // not as they are specified in the .ini config files. These are different, yes. This is bad, yes.
+  // See `tDel` for example: config file specifies it in days, but the code uses transformed `tDel` in AU/c.
+  // If I mixed up units of some of the parameters because of the above: 1. I'm sorry; 2. please fix it.
+  //
+  // Some descriptions might be incomplete. Not every parameter seems to be documented.
+  // Disable line soft-wrapping if you don't want to go insane reading this.
 
-  Scalar_t  rScale;
-  Scalar_t  flowMag;
-  Scalar_t  mhdDensityAu;
-  Scalar_t  mhdBAu;
-  Scalar_t  simStartTime;
-  Scalar_t  simStopTime;
-  Scalar_t  tDel;
-  Index_t   numEpSteps;
-  Scalar_t  aziSunStart;
-  Scalar_t  omegaSun;
-  Scalar_t  lamo;
-  Scalar_t  dsh_min;
-  Scalar_t  dsh_hel_min;
+
+  Index_t  numNodesPerStream;  // Number of nodes in the grid along each stream
+  Index_t  numRowsPerFace;     // Number of rows of streams per face for 6 faces
+  Index_t  numColumnsPerFace;  // Number of columns of streams per face for 6 faces
+  Index_t  numEnergySteps;     // Number of energy steps (TODO: How are they spaced?)
+  Index_t  numMuSteps;         // Number of pitch-angle steps. These are in cosine PA space and are spaced so that each step covers the same fraction of the unit sphere.
+
+
+  Index_t  adiabaticChangeAlg; // Select an algorithm for adiabatic change (from 1 to 3) (Used to init the global AdiabaticChangeAlg constant)
+  Index_t  adiabaticFocusAlg;  // Select an algorithm for adiabatic focusing (from 1 to 3) (Used to init the global AdiabaticFocusAlg constant)
+
+
+  Scalar_t  rScale;         // Location of the inner boundary (AU)
+  Scalar_t  flowMag;        // Flow velocity of background constant solar wind (cm/s)
+  Scalar_t  mhdDensityAu;   // Number density (cm^-3) at 1 AU
+  Scalar_t  mhdBAu;         // Magnetic field (Gauss) at 1 AU
+  Scalar_t  simStartTime;   // Simulation start time in fractional days. This only affects the JD label of the time axis; it is a tag for when it starts, so the output can be labeled with the desired day.
+  Scalar_t  simStopTime;    // Simulation stop time in fractional days.
+  Scalar_t  tDel;           // Relaxation time-step in AU/c (or approximately 8 min). The default of 7.21436 is about 1 hour. This is the main "outer" time step.
+  Index_t   numEpSteps;     // Number of ep-solver substeps, the number of times energetic particle distribution function is updated between updates to MHD/node flow. Affects numerical stability; 20 seems to be about right.
+  Scalar_t  aziSunStart;    // Initial azimuth of the Sun's surface (radians)
+  Scalar_t  omegaSun;       // Solar rotation rate (radians/AU/c)
+  Scalar_t  lamo;           // MFP (Mean Free Path) in AU at 1AU and 1GV. (TODO: Other distances/rigidities are scaled by ?)
+  Scalar_t  dsh_min;        // Minimal distance (AU?) between shell nodes in parallel diffusion (depends on useParallelDiffusion). Nodes that are closer together than this value will be "deduplicated".
+  Scalar_t  dsh_hel_min;    // (Unused)
   Scalar_t  mfpRadialPower;
-  Scalar_t  rigidityPower;
+  Scalar_t  rigidityPower;  // Exponent for rigidity scaling (mfp scaling with rigidity?)
 
-  Scalar_t  kperxkpar;
+  Scalar_t  kperxkpar;      // Efficiency of perpendicular diffusion (Kper/Kpar)
 
-  Scalar_t  eMin;
-  Scalar_t  eMax;
-  Index_t   useStochastic;
-  Scalar_t  focusingLimit;
+  Scalar_t  eMin;           // Minimum energy fully modeled in the code (MeV/nuc)
+  Scalar_t  eMax;           // Maximum energy (MeV/nuc)
+
+
+  Index_t   useStochastic;  // (Unused)
+  Scalar_t  focusingLimit;  // (Unused)
+
   Index_t   useEPBoundary;
-  Index_t   checkSeedPopulation;
+  Index_t   checkSeedPopulation; // Floor/Reset distribution if it drops below background, (TODO: only on inner three nodes of each streamline?)
 
-  Scalar_t  gammaEhigh;
-  Scalar_t  gammaElow;
+  Scalar_t  gammaEhigh;     // Negative slope of f at the upper energy boundary
+  Scalar_t  gammaElow;      // Negative slope of f at the lower energy boundary. Because quantities in the energetic particle solver depend on derivatives of the distribution function, the slope at the smallest/largest energy bin (eMin/eMax) needs to be assumed
 
-  Index_t   FailModeDump;
+
+  Index_t   FailModeDump;      // Dump out fail mode values
 
   Index_t   seedFunctionTest;
 
-  Index_t   outputFloat;
+  Index_t   outputFloat;       // Output netcdf files in 32-bit precision (1) or 64-bit precision (0). Might be used to save disk space.
 
-  Index_t   unifiedOutput;
+  Index_t   unifiedOutput;     // Output all mhd and particle data for every node along streams. The name is historical; this is the main output that you almost always want.
   Scalar_t  unifiedOutputTime;
 
-  Index_t   pointObserverOutput;
+  Index_t   pointObserverOutput;     // (Unused)
   Scalar_t  pointObserverOutputTime;
 
-  Index_t   streamFluxOutput;
+  Index_t   streamFluxOutput;     // Output pre-computed flux instead of the particle distribution
   Scalar_t  streamFluxOutputTime;
 
-  Index_t   subTimeCouple;
+  Index_t   subTimeCouple;  // (Unused) Couple to the MHD/plasma on the sub-timesteps
 
-  Index_t    epremDomain;
+  Index_t    epremDomain;   // Output position data for entire domain. Very often desirable, as this allows the node grid in inertial space.
   Scalar_t   epremDomainOutputTime;
 
   Index_t    unstructuredDomain;
-  Scalar_t   unstructuredDomainOutputTime;
+  Scalar_t   unstructuredDomainOutputTime; // (Unused)
 
-  Index_t    useAdiabaticChange;
-  Index_t    useAdiabaticFocus;
-  Index_t    useShellDiffusion;
-  Index_t    useParallelDiffusion;
-  Index_t    useDrift;
+  Index_t    useAdiabaticChange;   // Use adiabatic change (TODO: presumably in energy, as expands?)
+  Index_t    useAdiabaticFocus;    // Use adiabatic focusing (change in PA as field decreases)
+  Index_t    useShellDiffusion;    // Use perpendicular diffusion
+  Index_t    useParallelDiffusion; // Use parallel diffusion. (TODO: Otherwise energetic particles will just flow into the domain with the plasma/never move node to node? Set mfp to 0?)
+  Index_t    useDrift;             // Use particle drifts (TODO: Allow parallel diffusion?)
 
-  Index_t fluxLimiter;
 
-  int useManualStreamSpawnLoc;
-  Scalar_t* streamSpawnLocAzi;
-  Scalar_t* streamSpawnLocZen;
+  Index_t fluxLimiter; // (Unused)
 
-  int numSpecies;
-  Scalar_t*  mass;
-  Scalar_t*  charge;
 
-  int numObservers;
-  Scalar_t*  obsR;
-  Scalar_t*  obsTheta;
-  Scalar_t*  obsPhi;
+  // Manual Stream Spawn:
 
-  Scalar_t idw_p;
+  int useManualStreamSpawnLoc; // Specify initial stream locations manually
+  Scalar_t* streamSpawnLocAzi; // Manual initial stream azimuth (phi), radians
+  Scalar_t* streamSpawnLocZen; // Manual initial stream zenith (theta), radians
+
+
+  // Particle Species:
+
+  int numSpecies;      // Number of particle species (length needs to match arrays below)
+  Scalar_t*  mass;     // Masses in nucleons (length needs to be eq to numSpecies)
+  Scalar_t*  charge;   // Charges (e-) (length needs to be eq to numSpecies)
+
+
+  // Point Observers:
+
+  int numObservers;    // Number of point observers (needs to match the dimension of arrays below or be 0)
+  Scalar_t*  obsR;     // Observer radial position, in AU
+  Scalar_t*  obsTheta; // Observer colatitude (radians)
+  Scalar_t*  obsPhi;   // Observer longitude, (radians, 0.0 is center of face zero)
+  Scalar_t idw_p;      // Weighting factor for point-observer interpolation. The power is applied to the distance from the observer to the modeled point, for interpolation. Higher power more heavily weights closer nodes.
+
+
+  // Coupled MHD:
 
   Index_t mhdCouple;
   Index_t mhdNumFiles;
@@ -109,7 +141,7 @@ typedef struct {
 
   Index_t mhdCoupledTime;
   Scalar_t mhdStartTime;
-  Scalar_t epEquilibriumCalcDuration;
+  Scalar_t epEquilibriumCalcDuration; // Relaxation time in fractional days. The energetic particle code will be run for this length of time (against time step 0 of hte MHD?) before starting the simulation, in the hopes of reaching a steady state. This usually doesn't work out well and is rarely used
 
   Scalar_t preEruptionDuration;
   Index_t mhdInitMonteCarlo;
@@ -133,39 +165,64 @@ typedef struct {
   Scalar_t mhdRhoConvert;
   Scalar_t mhdTimeConvert;
 
+
+  // Solar Energetic Particle Source Function Parameters:
+  //
+  // This is a source function that is used as a floor on the energetic particle
+  // distribution for the innermost three nodes on each streamline.
+  // (This set of nodes is sometimes referred to as a "shell", i.e. this function
+  // applies on the innermost three shells, but "shell" is also used to
+  // refer to the set of all nodes on a given processor.
+  // Shell in that sense consists of multiple shells in the first sense).
+  // The source is isotropic.
+
   Index_t useBoundaryFunction;
-  Index_t boundaryFunctionInitDomain;
+  Index_t boundaryFunctionInitDomain; // Initialize particle source function over entire domain
 
-  Scalar_t boundaryFunctAmplitude;
-  Scalar_t boundaryFunctXi;
-  Scalar_t boundaryFunctGamma;
-  Scalar_t boundaryFunctBeta;
-  Scalar_t boundaryFunctEcutoff;
+  Scalar_t boundaryFunctAmplitude; // Amplitude of source function in number/(cm2 ∗ s ∗ sr ∗ MeV /nucleon) at 1 AU for "Reference Species" (4He?). (TODO: At energy? (1MeV/nuc?) Scaled for other species, radii, energies?)
+  Scalar_t boundaryFunctXi;        // Ratio of "Reference Species" (4He?) / H
+  Scalar_t boundaryFunctGamma;     // Energy power law exponent (TODO: For reference species?)
+  Scalar_t boundaryFunctBeta;      // Radial power law inverse exponent
+  Scalar_t boundaryFunctEcutoff;   // Cutoff energy (MeV). (TODO: Treat the seed spectrum as flat below this energy?)
 
-  Index_t   shockSolver;
-  Scalar_t  shockDetectPercent;
-  Scalar_t  minInjectionEnergy;
-  Scalar_t  shockInjectionFactor;
 
-  Index_t   idealShock;
-  Scalar_t  idealShockSharpness;
-  Scalar_t  idealShockScaleLength;
-  Scalar_t  idealShockJump;
+  // Shock Conditions:
+  //
+  // The shock solver will detect a shock and apply additional physics where detected.
+  // (TODO: This needs to be documented; there's a paper to cite...)
+
+  Index_t   shockSolver;          // Use the shock solver (If this is set to 1 then subTimeCouple needs to be 0)
+  Scalar_t  shockDetectPercent;   // DlnN/Dlnr value above which it detects a shock
+  Scalar_t  minInjectionEnergy;   // Minimum allowed injection energy (MeV)
+  Scalar_t  shockInjectionFactor; // Multiplicative factor on the seed function for injection (TODO: relative to what?)
+
+
+  // Ideal Cone CME:
+  //
+  // This will launch a CME into the simulation. (TODO: Reference for what model?)
+
+  Index_t   idealShock;            // Flag for using the ideal shock solution
+  Scalar_t  idealShockSharpness;   // Shock width (higher is sharper by idealShockScaleLength). Basically idealShockScaleLength is divided by this number to make it easier to tweak the shock parameters between runs.
+  Scalar_t  idealShockScaleLength; // Exponential scale length of shock variation (AU)
+  Scalar_t  idealShockJump;        // Shock jump for speed, density and magnetic field (aka. Rankine-Hugoniot shock strength).
   Scalar_t  idealShockFalloff;
-  Scalar_t  idealShockSpeed;
-  Scalar_t  idealShockInitTime;
-  Scalar_t  idealShockTheta;
-  Scalar_t  idealShockPhi;
-  Scalar_t  idealShockWidth;
+  Scalar_t  idealShockSpeed;       // Speed of the shock propagation (cm/s), separate from wind speed. In inertial frame not wind frame.
+  Scalar_t  idealShockInitTime;    // Time for shock to arrive on inner domain in fractional days. The shock is launched such that the midpoint of the shock passes the inner boundary at this point in the simulation. (TODO: Affected by simStartTime?)
+  Scalar_t  idealShockTheta;       // Location of center of cone CME (co-latitude, radian, pi/2 is on the equator)
+  Scalar_t  idealShockPhi;         // Location of center of cone CME (azimuth, radian, 0.0 is centered on one face)
+  Scalar_t  idealShockWidth;       // Width of cone CME (radian, entire domain (aka. isotropic) if 0.0)
 
-  int dumpFreq;
+
+  int dumpFreq;        // Output cadence for all output and restart files (in number of steps)
   int outputRestart;
   int dumpOnAbort;
   int saveRestartFile;
 
   char * warningsFile;
 
-  // these params are initialized from the above inputs
+
+  // These params are initialized from the above inputs:
+
   Scalar_t   mhdUs;
   Scalar_t   mhdNsAu;
   Scalar_t   mhdBsAu;
