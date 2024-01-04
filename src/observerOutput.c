@@ -60,12 +60,13 @@ time_t start_time;
 
     } else {
 
-      printf("Inner boundary: %f\n",
+      printf("Inner boundary: %f Rs\n",
              config.rScale / RSAU);
 
-      printf("Start: %f JD, EP Calc: %f JD\n",
+      printf("Start: %f JD, EP Calc: %f JD, Stop: %f JD\n",
              config.simStartTime,
-             config.epCalcStartTime);
+             config.epCalcStartTime,
+             config.simStopTime);
 
     }
 

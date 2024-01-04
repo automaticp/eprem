@@ -102,11 +102,12 @@ typedef struct /* Config_t */ {
 
   // Point Observers:
 
-  int numObservers;    // Number of point observers (needs to match the dimension of arrays below or be 0)
-  Scalar_t*  obsR;     // Observer radial position, in AU
-  Scalar_t*  obsTheta; // Observer colatitude (radians)
-  Scalar_t*  obsPhi;   // Observer longitude, (radians, 0.0 is center of face zero)
-  Scalar_t idw_p;      // Weighting factor for point-observer interpolation. The power is applied to the distance from the observer to the modeled point, for interpolation. Higher power more heavily weights closer nodes.
+  int numObservers;         // Number of point observers (needs to match the dimension of arrays below or be 0)
+  Scalar_t*  obsR;          // Observer radial position, in AU
+  Scalar_t*  obsTheta;      // Observer colatitude (radians)
+  Scalar_t*  obsPhi;        // Observer longitude, (radians, 0.0 is center of face zero)
+  Bool_t     obsUseDegrees; // Use degrees instead of radians for obsTheta and obsPhi
+  Scalar_t idw_p;           // Weighting factor for point-observer interpolation. The power is applied to the distance from the observer to the modeled point, for interpolation. Higher power more heavily weights closer nodes.
 
 
   // Coupled MHD:
@@ -166,6 +167,8 @@ typedef struct /* Config_t */ {
   Scalar_t boundaryFunctGamma;     // Energy power law exponent (TODO: For reference species?)
   Scalar_t boundaryFunctBeta;      // Radial power law inverse exponent
   Scalar_t boundaryFunctEcutoff;   // Cutoff energy (MeV). (TODO: Treat the seed spectrum as flat below this energy?)
+  Scalar_t boundaryFunctEr;
+  Scalar_t boundaryFunctR0;
 
 
   // Shock Conditions:
@@ -193,6 +196,9 @@ typedef struct /* Config_t */ {
   Scalar_t  idealShockTheta;       // Location of center of cone CME (co-latitude, radian, pi/2 is on the equator)
   Scalar_t  idealShockPhi;         // Location of center of cone CME (azimuth, radian, 0.0 is centered on one face)
   Scalar_t  idealShockWidth;       // Width of cone CME (radian, entire domain (aka. isotropic) if 0.0)
+  Scalar_t  idealShockThetaWidth;
+  Scalar_t  idealShockPhiWidth;
+  Bool_t    idealShockUseDegrees;
 
 
   // Output Parameters:
@@ -242,11 +248,14 @@ extern config_t cfg;
 
 void initGlobalParameters( char* configFilename );
 void getParams( char* configFilename);
+void checkParams( void );
+void checkIntBounds( char* key, Index_t val, Index_t minVal, Index_t maxVal );
+void checkDoubleBounds( char* key, Scalar_t val, Scalar_t minVal, Scalar_t maxVal );
 void setRuntimeConstants( void );
 
 Index_t readInt(char *key, Index_t defaultVal, Index_t minVal, Index_t maxVal);
 Scalar_t readDouble(char *key, Scalar_t defaultVal, Scalar_t minVal, Scalar_t maxVal);
 const char *readString(char *key, char *defaultVal);
-Scalar_t *readDoubleArray(char *key, int size, Scalar_t *defaultVal);
+Scalar_t *readDoubleArray(char *key, int defaultSize, int size, Scalar_t *defaultVal, Scalar_t minVal, Scalar_t maxVal);
 
 #endif

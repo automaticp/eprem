@@ -28,12 +28,15 @@ Config_t config;
 config_t cfg;
 
 const double third = 1.0/3.0;
+const double deg2rad = PI/180.0;
+const double rad2deg = 180.0/PI;
 
 void
 initGlobalParameters( char* configFilename )
 {
 
   getParams(configFilename);
+  checkParams();
   setRuntimeConstants();
 
 }
@@ -55,32 +58,32 @@ getParams( char* configFilename)
 
   }
 
-  config.numNodesPerStream = readInt("numNodesPerStream",N_PROCS,N_PROCS,BADINT);
-  config.numRowsPerFace = readInt("numRowsPerFace", 2, 1, BADINT);
-  config.numColumnsPerFace = readInt("numColumnsPerFace", 2, 1, BADINT);
-  config.numEnergySteps = readInt("numEnergySteps", 20, 2, BADINT);
-  config.numMuSteps = readInt("numMuSteps", 20, 2, BADINT);
+  config.numNodesPerStream = readInt("numNodesPerStream",N_PROCS,N_PROCS,LARGEINT);
+  config.numRowsPerFace = readInt("numRowsPerFace", 2, 1, LARGEINT);
+  config.numColumnsPerFace = readInt("numColumnsPerFace", 2, 1, LARGEINT);
+  config.numEnergySteps = readInt("numEnergySteps", 20, 2, LARGEINT);
+  config.numMuSteps = readInt("numMuSteps", 20, 2, LARGEINT);
 
-  config.rScale = readDouble("rScale", RSAU, VERYSMALL, BADVALUE);
-  config.flowMag = readDouble("flowMag", 400.0e5, VERYSMALL, BADVALUE);
-  config.mhdDensityAu = readDouble("mhdDensityAu", 8.30, VERYSMALL, BADVALUE);
-  config.mhdBAu = readDouble("mhdBAu", 1.60e-5, VERYSMALL, BADVALUE);
-  config.simStartTime = readDouble("simStartTime", 0.0, 0.0, BADVALUE);
-  config.tDel = readDouble("tDel", 0.01041666666667, VERYSMALL, BADVALUE);
-  config.simStopTime = readDouble("simStopTime", config.simStartTime + config.tDel, config.simStartTime, BADVALUE);
-  config.numEpSteps = readInt("numEpSteps", 30, 1, BADINT);
-  config.aziSunStart = readDouble("aziSunStart", 0.0, 0.0, BADVALUE);
-  config.omegaSun = readDouble("omegaSun", 0.001429813, 0.0, BADVALUE);
-  config.lamo = readDouble("lamo", 1.0, VERYSMALL, BADVALUE);
-  config.dsh_min = readDouble("dsh_min", 5.0e-5, VERYSMALL, BADVALUE);
-  config.dsh_hel_min = readDouble("dsh_hel_min", 2.5e-4, VERYSMALL, BADVALUE);
-  config.kperxkpar = readDouble("kperxkpar", 0.01, VERYSMALL, BADVALUE);
-  config.mfpRadialPower = readDouble("mfpRadialPower", 2.0, -1.0 * BADVALUE, BADVALUE);
-  config.rigidityPower = readDouble("rigidityPower", third, VERYSMALL, BADVALUE);
+  config.rScale = readDouble("rScale", RSAU, SMALLFLOAT, LARGEFLOAT);
+  config.flowMag = readDouble("flowMag", 400.0e5, SMALLFLOAT, LARGEFLOAT);
+  config.mhdDensityAu = readDouble("mhdDensityAu", 8.30, SMALLFLOAT, LARGEFLOAT);
+  config.mhdBAu = readDouble("mhdBAu", 1.60e-5, SMALLFLOAT, LARGEFLOAT);
+  config.simStartTime = readDouble("simStartTime", 0.0, 0.0, LARGEFLOAT);
+  config.tDel = readDouble("tDel", 0.01041666666667, SMALLFLOAT, LARGEFLOAT);
+  config.simStopTime = readDouble("simStopTime", config.simStartTime + config.tDel, config.simStartTime, LARGEFLOAT);
+  config.numEpSteps = readInt("numEpSteps", 30, 1, LARGEINT);
+  config.aziSunStart = readDouble("aziSunStart", 0.0, 0.0, LARGEFLOAT);
+  config.omegaSun = readDouble("omegaSun", 0.001429813, 0.0, LARGEFLOAT);
+  config.lamo = readDouble("lamo", 1.0, SMALLFLOAT, LARGEFLOAT);
+  config.dsh_min = readDouble("dsh_min", 5.0e-5, SMALLFLOAT, LARGEFLOAT);
+  config.dsh_hel_min = readDouble("dsh_hel_min", 2.5e-4, SMALLFLOAT, LARGEFLOAT);
+  config.kperxkpar = readDouble("kperxkpar", 0.01, SMALLFLOAT, LARGEFLOAT);
+  config.mfpRadialPower = readDouble("mfpRadialPower", 2.0, -1.0 * LARGEFLOAT, LARGEFLOAT);
+  config.rigidityPower = readDouble("rigidityPower", third, SMALLFLOAT, LARGEFLOAT);
   config.focusingLimit = readDouble("focusingLimit", 1.0, 0.0, 1.0);
 
-  config.eMin = readDouble("eMin", 1.0, VERYSMALL, BADVALUE);
-  config.eMax = readDouble("eMax", 1000.0, config.eMin, BADVALUE);
+  config.eMin = readDouble("eMin", 1.0, SMALLFLOAT, LARGEFLOAT);
+  config.eMax = readDouble("eMax", 1000.0, config.eMin, LARGEFLOAT);
   config.useStochastic = readInt("useStochastic", 0, 0, 1);
   config.useEPBoundary = readInt("useEPBoundary", 1, 0, 1);
   config.checkSeedPopulation = readInt("checkSeedPopulation", 1, 0, 1);
@@ -89,29 +92,26 @@ getParams( char* configFilename)
 
   config.fluxLimiter = readInt("fluxLimiter", 1, 0, 1);
 
-  config.gammaEhigh = readDouble("gammaEhigh", 0.0, -1.0 * BADVALUE, BADVALUE);
-  config.gammaElow = readDouble("gammaElow", 0.0, -1.0 * BADVALUE, BADVALUE);
+  config.gammaEhigh = readDouble("gammaEhigh", 0.0, -1.0 * LARGEFLOAT, LARGEFLOAT);
+  config.gammaElow = readDouble("gammaElow", 0.0, -1.0 * LARGEFLOAT, LARGEFLOAT);
 
   config.FailModeDump = readInt("FailModeDump", 1, 0, 1);
 
   config.outputFloat = readInt("outputFloat", 0, 0, 1);
 
   config.unifiedOutput = readInt("unifiedOutput", 1, 0, 1);
-  config.unifiedOutputTime = readDouble("unifiedOutputTime", 0.0, 0.0, BADVALUE);
-
-  config.pointObserverOutput = readInt("pointObserverOutput", 0, 0, 1);
-  config.pointObserverOutputTime = readDouble("pointObserverOutputTime", 0.0, 0.0, BADVALUE);
+  config.unifiedOutputTime = readDouble("unifiedOutputTime", 0.0, 0.0, LARGEFLOAT);
 
   config.streamFluxOutput = readInt("streamFluxOutput", 0, 0, 1);
-  config.streamFluxOutputTime = readDouble("streamFluxOutputTime", 0.0, 0.0, BADVALUE);
+  config.streamFluxOutputTime = readDouble("streamFluxOutputTime", 0.0, 0.0, LARGEFLOAT);
 
   config.subTimeCouple = readInt("subTimeCouple", 0, 0, 1);
 
   config.epremDomain = readInt("epremDomain", 0, 0, 1);
-  config.epremDomainOutputTime = readDouble("epremDomainOutputTime", 0.0, 0.0, BADVALUE);
+  config.epremDomainOutputTime = readDouble("epremDomainOutputTime", 0.0, 0.0, LARGEFLOAT);
 
   config.unstructuredDomain = readInt("unstructuredDomain", 0, 0, 1);
-  config.unstructuredDomainOutputTime = readDouble("unstructuredDomainOutputTime", 0.0, 0.0, BADVALUE);
+  config.unstructuredDomainOutputTime = readDouble("unstructuredDomainOutputTime", 0.0, 0.0, LARGEFLOAT);
 
   config.useAdiabaticChange = readInt("useAdiabaticChange", 1, 0, 1);
   config.useAdiabaticFocus = readInt("useAdiabaticFocus", 1, 0, 1);
@@ -119,19 +119,43 @@ getParams( char* configFilename)
   config.useParallelDiffusion = readInt("useParallelDiffusion", 1, 0, 1);
   config.useDrift = readInt("useDrift", 0, 0, 1);
 
-  config.numSpecies = readInt("numSpecies", 1, 0, 100);
+  config.numSpecies = readInt("numSpecies", 1, 1, 100);
   Scalar_t defaultMass[1] = {1.0};
-  Scalar_t defaultEnergy[1] = {1.0};
-  config.mass = readDoubleArray("mass", config.numSpecies, defaultMass);
-  config.charge = readDoubleArray("charge", config.numSpecies, defaultEnergy);
+  Scalar_t defaultCharge[1] = {1.0};
+  config.mass = readDoubleArray("mass", 1, config.numSpecies, defaultMass, 1.0, LARGEFLOAT);
+  config.charge = readDoubleArray("charge", 1, config.numSpecies, defaultCharge, 1.0, LARGEFLOAT);
 
-  config.numObservers = readInt("numObservers", 0, 0, 1000);
-  Scalar_t defaultObserver[1] = {0};
-  config.obsR = readDoubleArray("obsR", config.numObservers, defaultObserver);
-  config.obsTheta = readDoubleArray("obsTheta", config.numObservers, defaultObserver);
-  config.obsPhi = readDoubleArray("obsPhi", config.numObservers, defaultObserver);
+  config.pointObserverOutput = readInt("pointObserverOutput", 0, 0, 1);
+  config.pointObserverOutputTime = readDouble("pointObserverOutputTime", 0.0, 0.0, LARGEFLOAT);
 
-  config.idw_p = readDouble("idw_p", 3.0, VERYSMALL, BADVALUE);
+  if (config.pointObserverOutput == 1) {
+    config.numObservers = readInt("numObservers", 1, 0, 1000);
+  } else {
+    config.numObservers = readInt("numObservers", 0, 0, 1000);
+  }
+  if (config.numObservers > 0) {
+    Scalar_t defaultObsR[1] = {config.rScale};
+    Scalar_t defaultObsTheta[1] = {0.0};
+    Scalar_t defaultObsPhi[1] = {0.0};
+    Scalar_t *thetaArr, *phiArr;
+    config.obsR = readDoubleArray("obsR", 1, config.numObservers, defaultObsR, config.rScale, LARGEFLOAT);
+    thetaArr = readDoubleArray("obsTheta", 1, config.numObservers, defaultObsTheta, 0.0, PI);
+    phiArr = readDoubleArray("obsPhi", 1, config.numObservers, defaultObsPhi, 0.0, TWO_PI);
+    config.obsUseDegrees = readInt("obsUseDegrees", 0, 0, 1);
+    if (config.obsUseDegrees == 1) {
+      config.obsTheta = (Scalar_t *)malloc(sizeof(double) * config.numObservers);
+      config.obsPhi = (Scalar_t *)malloc(sizeof(double) * config.numObservers);
+      for (int i=0; i<config.numObservers; i++) {
+        config.obsTheta[i] = deg2rad*thetaArr[i];
+        config.obsPhi[i]   = deg2rad*phiArr[i];
+      }
+    } else {
+      config.obsTheta = thetaArr;
+      config.obsPhi   = phiArr;
+    }
+  }
+
+  config.idw_p = readDouble("idw_p", 3.0, SMALLFLOAT, LARGEFLOAT);
 
   config.mhdCouple = readInt("mhdCouple", 0, 0, 1);
   config.mhdNumFiles = readInt("mhdNumFiles", 0, 0, 32767);
@@ -141,62 +165,75 @@ getParams( char* configFilename)
   config.mhdDigits = readInt("mhdDigits", 3, 0, 32767);
 
   config.mhdCoupledTime = readInt("mhdCoupledTime", 1, 0, 1);
-  config.mhdStartTime = readDouble("mhdStartTime", 0.0, 0.0, BADVALUE);
-  config.epEquilibriumCalcDuration = readDouble("epEquilibriumCalcDuration", 0.0, 0.0, BADVALUE);
-  config.preEruptionDuration = readDouble("preEruptionDuration", 0.0, 0.0, BADVALUE);
+  config.mhdStartTime = readDouble("mhdStartTime", 0.0, 0.0, LARGEFLOAT);
+  config.epEquilibriumCalcDuration = readDouble("epEquilibriumCalcDuration", 0.0, 0.0, LARGEFLOAT);
+  config.preEruptionDuration = readDouble("preEruptionDuration", 0.0, 0.0, LARGEFLOAT);
 
-  config.mhdRadialMin = readDouble("mhdRadialMin", 0.0, 0.0, BADVALUE);
-  config.mhdRadialMax = readDouble("mhdRadialMax", 0.0, 0.0, BADVALUE);
-  config.mhdVmin = readDouble("mhdVmin", 50.0e5, 0.0, BADVALUE);
+  config.mhdRadialMin = readDouble("mhdRadialMin", 0.0, 0.0, LARGEFLOAT);
+  config.mhdRadialMax = readDouble("mhdRadialMax", 0.0, 0.0, LARGEFLOAT);
+  config.mhdVmin = readDouble("mhdVmin", 50.0e5, 0.0, LARGEFLOAT);
 
   config.mhdInitFromOuterBoundary = readInt("mhdInitFromOuterBoundary", 2, 0, 2);
   config.mhdInitMonteCarlo = readInt("mhdInitMonteCarlo", 0, 0, 1);
-  config.mhdInitRadius = readDouble("mhdInitRadius", 0.0, 0.0, BADVALUE);
-  config.mhdInitTimeStep = readDouble("mhdInitTimeStep", 0.000011574074074, 0.0, BADVALUE);
+  config.mhdInitRadius = readDouble("mhdInitRadius", 0.0, 0.0, LARGEFLOAT);
+  config.mhdInitTimeStep = readDouble("mhdInitTimeStep", 0.000011574074074, 0.0, LARGEFLOAT);
 
   config.useManualStreamSpawnLoc = readInt("useManualStreamSpawnLoc",0,0,1);
   Scalar_t defaultPos[1] = {0.0};
   if (config.useManualStreamSpawnLoc > 0){
-    config.streamSpawnLocAzi = readDoubleArray("streamSpawnLocAzi", 6*config.numRowsPerFace*config.numColumnsPerFace, defaultPos);
-    config.streamSpawnLocZen = readDoubleArray("streamSpawnLocZen", 6*config.numRowsPerFace*config.numColumnsPerFace, defaultPos);
+    config.streamSpawnLocAzi = readDoubleArray("streamSpawnLocAzi", 1, 6*config.numRowsPerFace*config.numColumnsPerFace, defaultPos, 0.0, TWO_PI);
+    config.streamSpawnLocZen = readDoubleArray("streamSpawnLocZen", 1, 6*config.numRowsPerFace*config.numColumnsPerFace, defaultPos, 0.0, PI);
   }
 
-  config.parallelFlow = readDouble("parallelFlow", 0.0, 0.0, BADVALUE);
+  config.parallelFlow = readDouble("parallelFlow", 0.0, 0.0, LARGEFLOAT);
   config.fieldAligned = readInt("fieldAligned", 0, 0, 1);
 
-  config.epCalcStartTime = readDouble("epCalcStartTime", config.simStartTime, 0.0, BADVALUE);
+  config.epCalcStartTime = readDouble("epCalcStartTime", config.simStartTime, 0.0, LARGEFLOAT);
 
   config.mhdRotateSolution = readInt("mhdRotateSolution", 1, 0, 1);
 
-  config.mhdBConvert = readDouble("mhdBConvert", 1.0, 0.0, BADVALUE);
-  config.mhdVConvert = readDouble("mhdVConvert", 1.0, 0.0, BADVALUE);
-  config.mhdRhoConvert = readDouble("mhdRhoConvert", 1.0, 0.0, BADVALUE);
-  config.mhdRhoConvert = readDouble("mhdTimeConvert", 1.0, 0.0, BADVALUE);
+  config.mhdBConvert = readDouble("mhdBConvert", 1.0, 0.0, LARGEFLOAT);
+  config.mhdVConvert = readDouble("mhdVConvert", 1.0, 0.0, LARGEFLOAT);
+  config.mhdRhoConvert = readDouble("mhdRhoConvert", 1.0, 0.0, LARGEFLOAT);
+  config.mhdRhoConvert = readDouble("mhdTimeConvert", 1.0, 0.0, LARGEFLOAT);
 
   config.useBoundaryFunction = readInt("useBoundaryFunction", 1, 0, 1);
   config.boundaryFunctionInitDomain = readInt("boundaryFunctionInitDomain", 1, 0, 1);
 
-  config.boundaryFunctAmplitude = readDouble("boundaryFunctAmplitude", 1.0, VERYSMALL, BADVALUE);
-  config.boundaryFunctXi = readDouble("boundaryFunctXi", 1.0, 0.0, BADVALUE);
-  config.boundaryFunctGamma = readDouble("boundaryFunctGamma", 2.0, 0.0, BADVALUE);
-  config.boundaryFunctBeta = readDouble("boundaryFunctBeta", 1.7, 0.0, BADVALUE);
-  config.boundaryFunctEcutoff = readDouble("boundaryFunctEcutoff", 1.0, 0.0, BADVALUE);
+  config.boundaryFunctAmplitude = readDouble("boundaryFunctAmplitude", 1.0, SMALLFLOAT, LARGEFLOAT);
+  config.boundaryFunctXi = readDouble("boundaryFunctXi", 1.0, 0.0, LARGEFLOAT);
+  config.boundaryFunctBeta = readDouble("boundaryFunctBeta", 2.0, 0.0, LARGEFLOAT);
+  config.boundaryFunctR0 = readDouble("boundaryFunctR0", 1.0, config.rScale, LARGEFLOAT);
+  config.boundaryFunctGamma = readDouble("boundaryFunctGamma", 2.0, 0.0, LARGEFLOAT);
+  config.boundaryFunctEr = readDouble("boundaryFunctEr", 1.0, 0.0, LARGEFLOAT);
+  config.boundaryFunctEcutoff = readDouble("boundaryFunctEcutoff", 1.0, 0.0, LARGEFLOAT);
 
   config.shockSolver = readInt("shockSolver", 0, 0, 1);
-  config.shockDetectPercent = readDouble("shockDetectPercent", 1.0, 0.0, BADVALUE);
-  config.minInjectionEnergy = readDouble("minInjectionEnergy", 0.01, VERYSMALL, BADVALUE);
-  config.shockInjectionFactor = readDouble("shockInjectionFactor", 1.0, 0.0, BADVALUE);
+  config.shockDetectPercent = readDouble("shockDetectPercent", 1.0, 0.0, LARGEFLOAT);
+  config.minInjectionEnergy = readDouble("minInjectionEnergy", 0.01, SMALLFLOAT, LARGEFLOAT);
+  config.shockInjectionFactor = readDouble("shockInjectionFactor", 1.0, 0.0, LARGEFLOAT);
 
   config.idealShock = readInt("idealShock", 0, 0, 1);
-  config.idealShockSharpness = readDouble("idealShockSharpness", 1.0, VERYSMALL, BADVALUE);
-  config.idealShockScaleLength = readDouble("idealShockScaleLength", 0.0046491, VERYSMALL, BADVALUE);
-  config.idealShockJump = readDouble("idealShockJump", 4.0, VERYSMALL, BADVALUE);
-  config.idealShockFalloff = readDouble("idealShockFalloff", 0.0, 0.0, BADVALUE);
-  config.idealShockSpeed = readDouble("idealShockSpeed", 1500e5, VERYSMALL, BADVALUE);
-  config.idealShockInitTime = readDouble("idealShockInitTime", config.simStartTime, config.simStartTime, BADVALUE);
-  config.idealShockTheta = readDouble("idealShockTheta", 1.570796, 0.0, PI);
-  config.idealShockPhi = readDouble("idealShockPhi", 0.0, 0.0, 2.0 * PI);
-  config.idealShockWidth = readDouble("idealShockWidth", 0.0, 0.0, PI);
+  config.idealShockSharpness = readDouble("idealShockSharpness", 1.0, SMALLFLOAT, LARGEFLOAT);
+  config.idealShockScaleLength = readDouble("idealShockScaleLength", 0.0046491, SMALLFLOAT, LARGEFLOAT);
+  config.idealShockJump = readDouble("idealShockJump", 4.0, SMALLFLOAT, LARGEFLOAT);
+  config.idealShockFalloff = readDouble("idealShockFalloff", 0.0, 0.0, LARGEFLOAT);
+  config.idealShockSpeed = readDouble("idealShockSpeed", 1500e5, SMALLFLOAT, LARGEFLOAT);
+  config.idealShockInitTime = readDouble("idealShockInitTime", config.simStartTime, config.simStartTime, LARGEFLOAT);
+  config.idealShockUseDegrees = readInt("idealShockUseDegrees", 0, 0, 1);
+  if (config.idealShockUseDegrees == 1) {
+    config.idealShockTheta = deg2rad * readDouble("idealShockTheta", 90.0, 0.0, 180.0);
+    config.idealShockPhi = deg2rad *readDouble("idealShockPhi", 0.0, 0.0, 360.0);
+    config.idealShockWidth = deg2rad *readDouble("idealShockWidth", 0.0, 0.0, 180.0);
+    config.idealShockThetaWidth = deg2rad *readDouble("idealShockThetaWidth", rad2deg * config.idealShockWidth, 0.0, 180.0);
+    config.idealShockPhiWidth = deg2rad *readDouble("idealShockPhiWidth", rad2deg * config.idealShockWidth, 0.0, 180.0);
+  } else {
+    config.idealShockTheta = readDouble("idealShockTheta", HALF_PI, 0.0, PI);
+    config.idealShockPhi = readDouble("idealShockPhi", 0.0, 0.0, TWO_PI);
+    config.idealShockWidth = readDouble("idealShockWidth", 0.0, 0.0, PI);
+    config.idealShockThetaWidth = readDouble("idealShockThetaWidth", config.idealShockWidth, 0.0, PI);
+    config.idealShockPhiWidth = readDouble("idealShockPhiWidth", config.idealShockWidth, 0.0, PI);
+  }
 
   config.dumpFreq = readInt("dumpFreq",1, 0, 1000000);
   config.outputRestart = readInt("outputRestart",0, 0, 1000000);
@@ -218,12 +255,7 @@ Index_t readInt(char *key, Index_t defaultVal, Index_t minVal, Index_t maxVal) {
   if (! config_lookup_int(&cfg, key, &val) )
     val = defaultVal;
 
-  if ( (val < minVal) || (val > maxVal) ) {
-
-    printf("%s is out of the acceptable range: %.4i <= %.4i <= %.4i\n", key, minVal, (Index_t)val, maxVal);
-    panic("the configuration reader detected an invalid value.\n");
-
-  }
+  checkIntBounds(key, val, minVal, maxVal);
 
   if (mpi_rank == 0)
     printf("%s: %i\n", key, (Index_t)val);
@@ -240,12 +272,7 @@ Scalar_t readDouble(char *key, Scalar_t defaultVal, Scalar_t minVal, Scalar_t ma
   if (! config_lookup_float(&cfg, key, &val) )
     val = defaultVal;
 
-  if ( (val < minVal) || (val > maxVal) ) {
-
-    printf("%s is out of the acceptable range: %.4e < %.4e < %.4e\n", key, minVal, (Scalar_t)val, maxVal);
-    panic("the configuration reader detected an invalid value.\n");
-
-  }
+  checkDoubleBounds(key, val, minVal, maxVal);
 
   if (mpi_rank == 0)
     printf("%s: %.4e\n", key, (Scalar_t)val);
@@ -270,46 +297,101 @@ const char *readString(char *key, char *defaultVal) {
 }
 
 
-Scalar_t *readDoubleArray(char *key, int size, Scalar_t *defaultVal) {
+Scalar_t *readDoubleArray(char *key, int defaultSize, int size, Scalar_t *defaultVal, Scalar_t minVal, Scalar_t maxVal) {
 
   Index_t i;
   Scalar_t *val;
   const config_setting_t *Arr;
 
-  val = (Scalar_t *)malloc(sizeof(double) * size);
-
-  if (mpi_rank == 0)
+  if (mpi_rank == 0) {
     printf("%s: ", key);
+  }
 
   if (size > 0) {
 
+    val = (Scalar_t *)malloc(sizeof(double) * size);
     Arr = config_lookup(&cfg, key);
 
     for (i = 0; i < size; i++) {
       val[i] = config_setting_get_float_elem(Arr, i);
-      if (mpi_rank == 0) printf("%.4e ", val[i]);
+      checkDoubleBounds(key, val[i], minVal, maxVal);
     }
 
-    if (mpi_rank == 0) printf("\n");
+    if (mpi_rank == 0) {
+      printf("[");
+      if (size == 1) {
+        printf("%.4e]\n", val[0]);
+      } else {
+        for (i = 0; i < size-1; i++) {
+          printf("%.4e, ", val[i]);
+        }
+        printf("%.4e]\n", val[i]);
+      }
+    }
 
     return val;
 
   } else {
 
     if (mpi_rank == 0){
-//   RMC: THIS IS WRONG AND DOES NOT FIND THE LENGTH OF THE ARRAY!!!
-//   NEED TO PASS THE DEFAULT SIZE IN AS WELL!!!
-//      for (i = 0; i < (Index_t)(sizeof(defaultVal) / sizeof(*defaultVal)); i++)
-//        printf("%.4e ", defaultVal[i]);
-      printf("Using default values.  First element: %.4e ", defaultVal[0]);
+      printf("[");
+      if (defaultSize == 1) {
+        printf("%.4e]\n", defaultVal[0]);
+      } else {
+        for (i = 0; i < defaultSize-1; i++) {
+          printf("%.4e, ", defaultVal[i]);
+        }
+        printf("%.4e]\n", defaultVal[i]);
+      }
     }
-
-    if (mpi_rank == 0) printf("\n");
 
     return defaultVal;
 
   }
 
+}
+
+
+void
+checkParams( void )
+{
+  // Enforce bounds on shock angles in radians.
+  checkDoubleBounds("idealShockTheta", config.idealShockTheta, 0.0, PI);
+  checkDoubleBounds("idealShockPhi", config.idealShockTheta, 0.0, 2.0 * PI);
+  checkDoubleBounds("idealShockWidth", config.idealShockTheta, 0.0, PI);
+  // Enforce bounds on observer angles in radians.
+  for (int i=0; i<config.numObservers; i++) {
+    checkDoubleBounds("obsTheta", config.obsTheta[i], 0.0, PI);
+    checkDoubleBounds("obsPhi", config.obsTheta[i], 0.0, 2.0 * PI);
+  }
+}
+
+
+void
+checkIntBounds(char *key, Index_t val, Index_t minVal, Index_t maxVal)
+{
+  if ( (val < minVal) || (val > maxVal) ) {
+
+    if (mpi_rank == 0) {
+      printf("%s=%d is out of the acceptable range: [%d, %d]\n", key, (Index_t)val, minVal, maxVal);
+      panic("the configuration reader detected an invalid value.\n");
+    }
+
+  }
+}
+
+
+void
+checkDoubleBounds(char *key, Scalar_t val, Scalar_t minVal, Scalar_t maxVal)
+{
+  if ( (val < minVal) || (val > maxVal) ) {
+
+    if (mpi_rank == 0) {
+      printf("%s=%.4e is out of the acceptable range: [%.4e, %.4e]\n", key, (Scalar_t)val, minVal, maxVal);
+      panic("the configuration reader detected an invalid value.\n");
+    }
+
+  }
 }
 
 

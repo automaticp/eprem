@@ -2,6 +2,16 @@
 
 ## NEXT
 
+- Create `install.sh` to replace `setup.sh` with some features moved from `build.sh`
+- Add reference radius and reference energy to runtime options
+- Allow user to pass ideal shock angles (i.e., theta, phi, and width) in degrees
+- Allow user to pass observer angles (i.e., theta and phi) in degrees
+- Change value of `VERSION` to be consistent with this and configure files
+- Refactor parameter-related constants
+- Improve config-file read and echo
+- Always output the initial time step
+- Accept different widths for the ideal shock
+
 ## v0.3.0 (18Dec2023)
 
 - Implement point-observer output
